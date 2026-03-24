@@ -217,7 +217,7 @@ prompt_vault_path() {
 
 prompt_user_tag() {
   echo -e "  ${DIM}Your first name — used to tag commands as yours${RESET}"
-  echo -e "  ${DIM}e.g. [ruy] context, [ruy] today${RESET}"
+  echo -e "  ${DIM}e.g. [ruy] context, [ruy] start-day${RESET}"
   echo -ne "  ${CYAN}▸${RESET} "
   read -r USER_TAG
 

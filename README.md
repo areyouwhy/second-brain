@@ -55,7 +55,7 @@ Then open Obsidian, add the vault, and start filling in your notes.
 | `/context-work` | Identity + career + current role |
 | `/context-project` | Deep project context with all dependencies |
 | `/context-all` | Everything in the vault (heaviest) |
-| `/today` | Daily planning — calendar, tasks, priorities |
+| `/start-day` | Morning briefing — open threads, uncommitted work, priorities |
 | `/end-session` | Wrap up a project work session |
 | `/end-day` | End-of-day aggregation across all projects |
 | `/update-context-dependencies` | Maintain project dependency declarations |

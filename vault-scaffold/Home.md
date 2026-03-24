@@ -17,6 +17,8 @@ Welcome to your second brain. This is the entry point.
 - [[Work & Career]] — Professional context
 - [[Interests & Hobbies]] — Personal interests
 - [[People]] — Key people in your life
+- [[AI Setup]] — AI tools, commands, and configuration
+- [[Command Workflow]] — How to use the slash commands
 
 <!-- Uncomment the block below if you have the Dataview plugin installed.
      This creates a live table of all your project notes.

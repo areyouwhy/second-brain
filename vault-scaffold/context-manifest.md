@@ -47,3 +47,8 @@ context-dependencies:
 ```
 
 The `directory` field matches against the folder name on disk. The `context-dependencies` list tells context commands which vault notes to load alongside the project.
+
+## See also
+
+- [[Command Workflow]] — How to use all 10 commands throughout a typical day
+- [[AI Setup]] — Overview of AI tooling for this vault

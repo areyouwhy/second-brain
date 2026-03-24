@@ -1,19 +1,17 @@
 ---
-title: Daily Note
+title: {{date}}
 tags:
-  - templates
+  - daily
+date: {{date}}
+projects: []
+decisions: []
+open-threads: []
 ---
 
 # {{date}}
 
-## Morning Plan
-
--
+## Intentions
 
 ## Log
 
 ## Reflections
-
-## Tasks
-
-- [ ]

@@ -79,34 +79,63 @@ obsidian vault="{{VAULT_NAME}}" read path="Daily/$CURRENT_DATE.md"
 
 If it doesn't exist, create it. If it does, update it.
 
-Fill in the `## Log` section:
+### Frontmatter
+
+Ensure the daily note has these frontmatter fields. Fill them in based on the day's activity:
+
+```yaml
+---
+title: $CURRENT_DATE
+tags:
+  - daily
+date: $CURRENT_DATE
+projects:
+  - {project names that had activity today}
+decisions:
+  - {key decisions made, pulled from session notes or commits}
+open-threads:
+  - {things left uncommitted, unpushed, or unfinished}
+  - {ideas that came up but weren't acted on}
+---
+```
+
+### Intentions section
+
+If `/start-day` already wrote an Intentions section, **leave it untouched**. If the note uses an older format with "Morning Plan", treat it the same — don't overwrite.
+
+### Log section — write narrative prose
+
+Write the `## Log` section as **2-4 paragraphs of journal-style prose**. This should read like a brief journal entry that describes how the day went — what you worked on, what mattered, and where things stand.
+
+**Tone:** First-person, reflective but concise. Write as if summarizing the day to a future version of yourself. Conversational, not formal.
+
+**What to include:**
+- Which projects were touched and what the work involved
+- Key decisions and why they were made
+- Problems encountered and how they were resolved
+- The current state of things — what's done, what's in progress
+
+**What NOT to do:**
+- Don't use bullet lists or sub-headers inside Log — write flowing paragraphs
+- Don't include commit hashes or raw git output
+- Don't write stats ("2 sessions across 3 projects") — describe what happened
+- Don't repeat the frontmatter data verbatim — the prose should add context and narrative
+
+**Example of good tone:**
+
+> Spent most of the day on the Second Brain setup script, rewriting it from a basic installer into a proper interactive CLI. The big decision was keeping it pure bash instead of reaching for Node — it's a one-time setup tool, not a web app. Got the profile interview working with a TUI grid picker, which feels much better than the old text prompts. Also touched ruy.se to add the design system preview page and link to the public repo. The vault itself needed restructuring to match the new project folder convention — moved session notes into per-project subfolders. Setup script is ready for testing but hasn't been committed yet.
+
+If there are no projects with activity today:
 
 ```markdown
 ## Log
 
-### Projects touched
-- **{Project 1}** — {1-line summary of today's work}
-- **{Project 2}** — {1-line summary}
-
-### Sessions
-- {count} sessions across {count} projects
-
-### Key decisions
-- {any decisions made today, pulled from session notes or commits}
-
-### Open threads
-- {things left uncommitted, unpushed, or unfinished}
-- {ideas that came up but weren't acted on}
+Quiet day — no project work.
 ```
 
-If there are no projects with activity today, note that:
-```markdown
-## Log
+### Reflections section
 
-No project activity today.
-```
-
-If `## Reflections` is empty, leave it — don't fill it in. That's for the user.
+If `## Reflections` is empty, leave it — that's for the user. Never fill it in.
 
 ## Step 5: Output
 
@@ -114,8 +143,7 @@ If `## Reflections` is empty, leave it — don't fill it in. That's for the user
 
 ### Day Wrapped — $CURRENT_DATE
 
-**Projects active today:**
-- {Project}: {commit count} commits — {summary}
+{2-3 sentence narrative summary of the day — same tone as the Log.}
 
 **Uncommitted work:**
 - {project: description of what's pending, or "All clean"}
@@ -129,6 +157,7 @@ If `## Reflections` is empty, leave it — don't fill it in. That's for the user
 
 Important:
 - Don't duplicate what `/end-session` already wrote — read it and reference it
-- Keep daily note entries scannable — this is a journal, not a report
-- If no projects had activity, still create the daily note (the user might fill in reflections or morning planning)
+- The daily note should feel like a journal entry, not a database dump
+- If no projects had activity, still create the daily note (the user might fill in reflections)
 - Flag uncommitted work clearly — it's the most actionable thing for tomorrow morning
+- Structured data belongs in frontmatter (projects, decisions, open-threads). The body is for humans.
