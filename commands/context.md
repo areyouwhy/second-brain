@@ -4,13 +4,13 @@
 
 Check the current working directory. Extract the project folder name (e.g., `churri.se` from `~/Documents/projects/churri.se/src/`).
 
-Search for a matching project note:
+Search for a matching project note in the `Projects/` folder:
 
 ```
-obsidian vault="{{VAULT_NAME}}" search query="directory: {folder-name}" limit=5
+obsidian vault="{{VAULT_NAME}}" search query="{folder-name}" path="Projects" limit=5
 ```
 
-If a result is found in `Projects/`, read that project note. Look at its frontmatter for:
+From the results, read each candidate note and check its frontmatter for `directory: {folder-name}`. The first match is your project note. Look at its frontmatter for:
 - `context-dependencies` — a list of vault note paths to load alongside it
 
 ## Step 2: Load Core Identity (always)
