@@ -17,3 +17,15 @@ Welcome to your second brain. This is the entry point.
 - [[Work & Career]] — Professional context
 - [[Interests & Hobbies]] — Personal interests
 - [[People]] — Key people in your life
+
+<!-- Uncomment the block below if you have the Dataview plugin installed.
+     This creates a live table of all your project notes.
+
+## Projects
+
+```dataview
+TABLE status, last-updated AS "Updated"
+FROM #project AND -"Templates"
+SORT last-updated DESC
+```
+-->

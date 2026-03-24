@@ -1,4 +1,4 @@
-Wrap up the current working session. Project-scoped — it only cares about the project you've been working in. Context should already be loaded from this session.
+[{{USER_TAG}}] Wrap up the current working session. Project-scoped — it only cares about the project you've been working in. Context should already be loaded from this session.
 
 ## Step 1: Check for uncommitted work
 

@@ -1,4 +1,4 @@
-Full context load. Reads everything in the vault — identity, work, all projects, all dependencies. Use for holistic sessions: planning, optimization, cross-project analysis, vault maintenance.
+[{{USER_TAG}}] Full context load. Reads everything in the vault — identity, work, all projects, all dependencies. Use for holistic sessions: planning, optimization, cross-project analysis, vault maintenance.
 
 ## Step 1: Load all identity notes
 

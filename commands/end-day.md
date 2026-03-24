@@ -1,4 +1,4 @@
-End-of-day wrap-up. Aggregates across all projects, writes the daily note, and flags anything left open. Global counterpart to `/end-session` (which is project-scoped).
+[{{USER_TAG}}] End-of-day wrap-up. Aggregates across all projects, writes the daily note, and flags anything left open. Global counterpart to `/end-session` (which is project-scoped).
 
 Sessions may have already been closed with `/end-session` during the day — if so, their session notes are already in the project vault notes. This command reads those and aggregates. If sessions weren't explicitly closed, it does the gathering itself.
 
@@ -74,7 +74,7 @@ This keeps `/end-day` fast and non-redundant. It doesn't redo work that `/end-se
 
 Check if a daily note exists:
 ```
-obsidian vault="{{VAULT_NAME}}" read path="$CURRENT_DATE.md"
+obsidian vault="{{VAULT_NAME}}" read path="Daily/$CURRENT_DATE.md"
 ```
 
 If it doesn't exist, create it. If it does, update it.

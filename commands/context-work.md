@@ -1,4 +1,4 @@
-Load work and career context. Use when you're focused on professional tasks — job prep, work planning, career thinking.
+[{{USER_TAG}}] Load work and career context. Use when you're focused on professional tasks — job prep, work planning, career thinking.
 
 ## Load identity + work context
 

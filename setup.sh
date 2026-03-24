@@ -57,6 +57,12 @@ display_path() {
   echo "${1/#$HOME/~}"
 }
 
+# Drain leftover bytes from multi-byte key sequences (e.g. arrow keys send 3 bytes
+# but read -n 1 only consumes the first). Call after every read -r -n 1.
+flush_stdin() {
+  while IFS= read -rsn1 -t 0.1 _discard 2>/dev/null; do :; done
+}
+
 # ─── ASCII Art Header ────────────────────────────────────────────────────────
 
 print_header() {
@@ -163,7 +169,7 @@ check_prerequisites() {
     print_blank
     echo -ne "  Continue anyway? ${DIM}(y/N)${RESET} "
     read -r -n 1 reply
-    echo ""
+    echo ""; flush_stdin
     if [[ ! "$reply" =~ ^[Yy]$ ]]; then
       print_blank
       echo -e "  ${DIM}Setup cancelled.${RESET}"
@@ -209,6 +215,21 @@ prompt_vault_path() {
   fi
 }
 
+prompt_user_tag() {
+  echo -e "  ${DIM}Your first name — used to tag commands as yours${RESET}"
+  echo -e "  ${DIM}e.g. [ruy] context, [ruy] today${RESET}"
+  echo -ne "  ${CYAN}▸${RESET} "
+  read -r USER_TAG
+
+  if [[ -z "$USER_TAG" ]]; then
+    USER_TAG="$VAULT_NAME"
+  fi
+
+  # Lowercase for the tag
+  USER_TAG=$(echo "$USER_TAG" | tr '[:upper:]' '[:lower:]')
+  print_blank
+}
+
 confirm_setup() {
   local display_vault_path
   display_vault_path=$(display_path "$VAULT_PATH")
@@ -219,12 +240,13 @@ confirm_setup() {
   print_blank
   echo -e "  Vault name   ${BOLD}$VAULT_NAME${RESET}"
   echo -e "  Vault path   ${BOLD}${display_vault_path}${RESET}"
+  echo -e "  Command tag  ${BOLD}[$USER_TAG]${RESET}"
   echo -e "  Commands     ${DIM}10 commands → ~/.claude/commands/${RESET}"
   print_blank
 
   echo -ne "  Proceed? ${DIM}(Y/n)${RESET} "
   read -r -n 1 reply
-  echo ""
+  echo ""; flush_stdin
   if [[ "$reply" =~ ^[Nn]$ ]]; then
     print_blank
     echo -e "  ${DIM}Setup cancelled.${RESET}"
@@ -276,7 +298,7 @@ install_commands() {
     filename=$(basename "$file")
     cmd_name=$(basename "$filename" .md)
     target="$commands_dir/$filename"
-    new_content=$(sed "s/{{VAULT_NAME}}/$VAULT_NAME/g" "$file")
+    new_content=$(sed -e "s/{{VAULT_NAME}}/$VAULT_NAME/g" -e "s/{{USER_TAG}}/$USER_TAG/g" "$file")
 
     if [[ ! -f "$target" ]]; then
       new_cmds+=("$cmd_name")
@@ -342,7 +364,7 @@ install_commands() {
   # Install new commands
   for cmd in "${new_cmds[@]}"; do
     local src="$SCRIPT_DIR/commands/${cmd}.md"
-    sed "s/{{VAULT_NAME}}/$VAULT_NAME/g" "$src" > "$commands_dir/${cmd}.md"
+    sed -e "s/{{VAULT_NAME}}/$VAULT_NAME/g" -e "s/{{USER_TAG}}/$USER_TAG/g" "$src" > "$commands_dir/${cmd}.md"
   done
 
   if [[ ${#new_cmds[@]} -gt 0 ]]; then
@@ -353,38 +375,70 @@ install_commands() {
     print_success "${BOLD}${#current_cmds[@]}${RESET} command(s) already up to date"
   fi
 
-  # Handle changed commands
+  # Handle changed commands — show diff and ask per command
   if [[ ${#changed_cmds[@]} -gt 0 ]]; then
-    # Check if they're all from a different vault
-    local other_vault=""
-    for reason in "${changed_reasons[@]}"; do
-      if [[ "$reason" == vault:* ]]; then
-        other_vault="${reason#vault: }"
+    print_blank
+    echo -e "  ${YELLOW}${BOLD}${#changed_cmds[@]} command(s) differ from template${RESET}"
+    print_blank
+
+    local updated_count=0 skipped_count=0
+
+    for i in "${!changed_cmds[@]}"; do
+      local cmd="${changed_cmds[$i]}"
+      local reason="${changed_reasons[$i]}"
+      local src="$SCRIPT_DIR/commands/${cmd}.md"
+      local target="$commands_dir/${cmd}.md"
+      local new_content
+      new_content=$(sed -e "s/{{VAULT_NAME}}/$VAULT_NAME/g" -e "s/{{USER_TAG}}/$USER_TAG/g" "$src")
+
+      echo -e "  ${CYAN}/${cmd}${RESET} ${DIM}(${reason})${RESET}"
+
+      # Show a compact diff: lines removed from installed, lines added from template
+      local diff_output
+      diff_output=$(diff --unified=1 "$target" <(echo "$new_content") 2>/dev/null || true)
+
+      # Display up to 8 diff lines (skip the header)
+      local line_count=0
+      while IFS= read -r diff_line; do
+        # Skip diff headers (---, +++, @@)
+        if [[ "$diff_line" == ---* || "$diff_line" == +++* ]]; then continue; fi
+        if [[ "$diff_line" == @@* ]]; then
+          echo -e "     ${DIM}···${RESET}"
+          continue
+        fi
+        if [[ "$diff_line" == -* ]]; then
+          echo -e "     ${RED}${diff_line}${RESET}"
+        elif [[ "$diff_line" == +* ]]; then
+          echo -e "     ${GREEN}${diff_line}${RESET}"
+        fi
+        line_count=$((line_count + 1))
+        if [[ $line_count -ge 8 ]]; then
+          echo -e "     ${DIM}… (more changes)${RESET}"
+          break
+        fi
+      done <<< "$diff_output"
+
+      print_blank
+      echo -ne "  Update /${cmd}? ${DIM}(y/N)${RESET} "
+      read -r -n 1 reply
+      echo ""; flush_stdin
+
+      if [[ "$reply" =~ ^[Yy]$ ]]; then
+        echo "$new_content" > "$target"
+        print_success "Updated /${cmd}"
+        updated_count=$((updated_count + 1))
+      else
+        print_info "Kept /${cmd} as-is"
+        skipped_count=$((skipped_count + 1))
       fi
+      print_blank
     done
 
-    print_blank
-    if [[ -n "$other_vault" ]]; then
-      echo -e "  ${YELLOW}${BOLD}${#changed_cmds[@]} command(s) already exist${RESET}"
-      echo -e "  ${DIM}Currently configured for vault ${BOLD}\"${other_vault}\"${RESET}${DIM}.${RESET}"
-    else
-      echo -e "  ${YELLOW}${BOLD}${#changed_cmds[@]} command(s) have local changes${RESET}"
-      echo -e "  ${DIM}The installed versions differ from this template.${RESET}"
+    if [[ $updated_count -gt 0 ]]; then
+      print_success "${BOLD}${updated_count}${RESET} command(s) updated"
     fi
-
-    print_blank
-    echo -ne "  Overwrite them? ${DIM}(y/N)${RESET} "
-    read -r -n 1 reply
-    echo ""
-
-    if [[ "$reply" =~ ^[Yy]$ ]]; then
-      for cmd in "${changed_cmds[@]}"; do
-        local src="$SCRIPT_DIR/commands/${cmd}.md"
-        sed "s/{{VAULT_NAME}}/$VAULT_NAME/g" "$src" > "$commands_dir/${cmd}.md"
-      done
-      print_success "Updated ${BOLD}${#changed_cmds[@]}${RESET} command(s)"
-    else
-      print_info "Skipped — existing commands untouched"
+    if [[ $skipped_count -gt 0 ]]; then
+      print_info "${BOLD}${skipped_count}${RESET} command(s) kept as-is"
     fi
   fi
 }
@@ -851,7 +905,7 @@ run_interview() {
 
   echo -ne "  Set up your profile now? ${DIM}(Y/n)${RESET} "
   read -r -n 1 reply
-  echo ""
+  echo ""; flush_stdin
   if [[ "$reply" =~ ^[Nn]$ ]]; then
     return
   fi
@@ -976,7 +1030,7 @@ launch_profile_setup() {
   if check_claude_code; then
     echo -ne "  Launch Claude Code now? ${DIM}(Y/n)${RESET} "
     read -r -n 1 reply
-    echo ""
+    echo ""; flush_stdin
     print_blank
 
     if [[ ! "$reply" =~ ^[Nn]$ ]]; then
@@ -1082,6 +1136,9 @@ print_help() {
   echo -e "    4. Optionally interviews you and launches Claude Code to"
   echo -e "       fill in your vault notes automatically"
   echo ""
+  echo -e "  ${DIM}Re-run after pulling updates — the script auto-detects an${RESET}"
+  echo -e "  ${DIM}existing install and offers to update commands in place.${RESET}"
+  echo ""
   echo -e "  ${DIM}https://github.com/areyouwhy/second-brain${RESET}"
   echo ""
 }
@@ -1089,6 +1146,7 @@ print_help() {
 # ─── Dry Run ──────────────────────────────────────────────────────────────────
 
 DRY_RUN=false
+USER_TAG=""
 
 setup_dry_run() {
   DRY_RUN=true
@@ -1113,6 +1171,116 @@ setup_dry_run() {
   trap "rm -rf '$tmpdir'" EXIT
 }
 
+# ─── Update Detection ────────────────────────────────────────────────────────
+
+SETUP_MODE=""  # "install" or "update"
+DETECTED_VAULT=""
+DETECTED_TAG=""
+
+detect_existing_install() {
+  local commands_dir="${COMMANDS_DIR_OVERRIDE:-$HOME/.claude/commands}"
+
+  # Check if any of our commands exist
+  if [[ ! -f "$commands_dir/context.md" ]]; then
+    SETUP_MODE="install"
+    return
+  fi
+
+  # Extract vault name from installed command
+  DETECTED_VAULT=$(grep -o 'vault="[^"]*"' "$commands_dir/context.md" 2>/dev/null | head -1 | sed 's/vault="//;s/"//')
+
+  # Extract user tag from first line — format: [tag] Description...
+  local first_line
+  first_line=$(head -1 "$commands_dir/context.md" 2>/dev/null)
+  if [[ "$first_line" =~ ^\[([^]]+)\] ]]; then
+    DETECTED_TAG="${BASH_REMATCH[1]}"
+  fi
+
+  if [[ -n "$DETECTED_VAULT" ]]; then
+    SETUP_MODE="update"
+  else
+    SETUP_MODE="install"
+  fi
+}
+
+# ─── Update Flow ─────────────────────────────────────────────────────────────
+
+run_update() {
+  echo -e "  ${BOLD}Existing installation detected${RESET}"
+  print_blank
+  echo -e "  Vault name   ${BOLD}$VAULT_NAME${RESET}"
+  if [[ -n "$USER_TAG" ]]; then
+    echo -e "  Command tag  ${BOLD}[$USER_TAG]${RESET}"
+  fi
+  print_blank
+
+  # Count what's changed
+  SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+  local commands_dir="${COMMANDS_DIR_OVERRIDE:-$HOME/.claude/commands}"
+  local new_count=0 changed_count=0 current_count=0
+
+  for file in "$SCRIPT_DIR/commands/"*.md; do
+    local filename target new_content
+    filename=$(basename "$file")
+    target="$commands_dir/$filename"
+    new_content=$(sed -e "s/{{VAULT_NAME}}/$VAULT_NAME/g" -e "s/{{USER_TAG}}/$USER_TAG/g" "$file")
+
+    if [[ ! -f "$target" ]]; then
+      new_count=$((new_count + 1))
+    elif [[ "$new_content" != "$(cat "$target")" ]]; then
+      changed_count=$((changed_count + 1))
+    else
+      current_count=$((current_count + 1))
+    fi
+  done
+
+  if [[ $new_count -eq 0 && $changed_count -eq 0 ]]; then
+    print_success "All commands are up to date"
+    print_blank
+    echo -e "  ${DIM}Nothing to update.${RESET}"
+    print_blank
+    return
+  fi
+
+  if [[ $new_count -gt 0 ]]; then
+    echo -e "  ${GREEN}${new_count}${RESET} new command(s) to install"
+  fi
+  if [[ $changed_count -gt 0 ]]; then
+    echo -e "  ${YELLOW}${changed_count}${RESET} command(s) to update"
+  fi
+  if [[ $current_count -gt 0 ]]; then
+    echo -e "  ${DIM}${current_count} command(s) already up to date${RESET}"
+  fi
+
+  print_blank
+
+  # Offer to change vault name or tag
+  echo -ne "  Change vault name? ${DIM}(current: ${VAULT_NAME})${RESET} ${DIM}(y/N)${RESET} "
+  read -r -n 1 reply
+  echo ""; flush_stdin
+  if [[ "$reply" =~ ^[Yy]$ ]]; then
+    prompt_vault_name
+  fi
+
+  echo -ne "  Change command tag? ${DIM}(current: ${USER_TAG:-none})${RESET} ${DIM}(y/N)${RESET} "
+  read -r -n 1 reply
+  echo ""; flush_stdin
+  if [[ "$reply" =~ ^[Yy]$ ]]; then
+    prompt_user_tag
+  fi
+
+  print_blank
+
+  # Install commands (reuses existing logic with full diff view)
+  install_commands
+
+  print_blank
+  local done_color
+  done_color=$(gradient_color 3 11)
+  echo -e "  ${done_color}${BOLD}Update complete!${RESET}"
+  print_blank
+}
+
 # ─── Main ─────────────────────────────────────────────────────────────────────
 
 main() {
@@ -1130,9 +1298,28 @@ main() {
     print_header
   fi
 
+  detect_existing_install
+
+  # Carry detected values as defaults
+  VAULT_NAME="${DETECTED_VAULT}"
+  USER_TAG="${DETECTED_TAG}"
+
+  if [[ "$SETUP_MODE" == "update" ]]; then
+    run_update
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+      print_blank
+      echo -e "  ${MAGENTA}${BOLD}DRY RUN COMPLETE${RESET} ${DIM}— nothing was changed${RESET}"
+      print_blank
+    fi
+    return
+  fi
+
+  # ── Fresh install flow ──
   check_prerequisites
   prompt_vault_name
   prompt_vault_path
+  prompt_user_tag
 
   # In dry-run mode, override paths after prompts
   if [[ "$DRY_RUN" == "true" ]]; then

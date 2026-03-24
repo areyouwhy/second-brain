@@ -1,4 +1,4 @@
-Scan all project notes in the vault. For each project, analyze its content and cross-references to suggest updates to its `context-dependencies` frontmatter. Add relevant dependencies, remove stale ones.
+[{{USER_TAG}}] Scan all project notes in the vault. For each project, analyze its content and cross-references to suggest updates to its `context-dependencies` frontmatter. Add relevant dependencies, remove stale ones.
 
 ## Step 1: Find all project notes
 

@@ -1,4 +1,4 @@
-Smart context loader. Detects where you are and loads only what's relevant from the Obsidian vault. Projects declare their own dependencies via frontmatter — this command just follows them.
+[{{USER_TAG}}] Smart context loader. Detects where you are and loads only what's relevant from the Obsidian vault. Projects declare their own dependencies via frontmatter — this command just follows them.
 
 ## Step 1: Detect the current project
 

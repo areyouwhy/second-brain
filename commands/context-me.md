@@ -1,4 +1,4 @@
-Lightweight identity-only context load. Use when Claude just needs to know who you are — no project or work context.
+[{{USER_TAG}}] Lightweight identity-only context load. Use when Claude just needs to know who you are — no project or work context.
 
 ## Load Core Identity
 

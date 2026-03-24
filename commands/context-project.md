@@ -1,4 +1,4 @@
-Deep project context load. Use when you're doing focused work inside a project and want maximum relevant context. Projects declare their own dependencies via frontmatter.
+[{{USER_TAG}}] Deep project context load. Use when you're doing focused work inside a project and want maximum relevant context. Projects declare their own dependencies via frontmatter.
 
 ## Step 1: Detect the current project
 

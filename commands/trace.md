@@ -1,4 +1,4 @@
-Trace how the idea "$ARGUMENTS" has evolved over time across the Obsidian vault. Use the `obsidian` CLI to search and read notes.
+[{{USER_TAG}}] Trace how the idea "$ARGUMENTS" has evolved over time across the Obsidian vault. Use the `obsidian` CLI to search and read notes.
 
 Follow these steps:
 

@@ -19,6 +19,18 @@ A set of Claude Code commands and an Obsidian vault structure that together crea
 - [Claude Code](https://claude.ai/code) (requires Claude subscription)
 - [obsidian-skills](https://github.com/anthropics/obsidian-skills) plugin for Claude Code
 
+## Recommended plugins
+
+These Obsidian community plugins work well with the vault structure:
+
+| Plugin | What it adds |
+|--------|-------------|
+| [Dataview](https://github.com/blacksmithgu/obsidian-dataview) | Query notes as data — project dashboards, task views |
+| [Templater](https://github.com/SilentVoid13/Templater) | Dynamic templates with dates, prompts, logic |
+| [Calendar](https://github.com/liamcain/obsidian-calendar-plugin) | Calendar sidebar for navigating daily notes |
+
+Install them from Obsidian's community plugin browser after setup.
+
 ## Quick start
 
 ```bash
@@ -92,6 +104,11 @@ context-dependencies:
 ## Work context
 
 Tag your current employer/role note with `#work-current` so `/context-work` can find it dynamically.
+
+## Docs
+
+- [Command Workflow](docs/command-workflow.md) — daily loop, command picker, context weight
+- [Vault Style Guide](docs/vault-style-guide.md) — frontmatter, tags, naming, writing conventions
 
 ## License
 

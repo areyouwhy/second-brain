@@ -1,4 +1,4 @@
-Pull calendar, tasks, and daily note into a prioritized plan for the day. Use the `obsidian` CLI and macOS calendar tools.
+[{{USER_TAG}}] Pull calendar, tasks, and daily note into a prioritized plan for the day. Use the `obsidian` CLI and macOS calendar tools.
 
 ## Step 1: Get today's date and daily note
 
