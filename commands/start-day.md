@@ -120,7 +120,7 @@ open-threads: []
 
 ## Intentions
 
-{Write 2-4 sentences here based on what was found — priorities, open threads to address, goals for the day. First-person, intentional tone. Not a task list — describe what the day should be about.}
+{Write 2-4 sentences here based on what was found — priorities, open threads to address, goals for the day. First-person, intentional tone. Not a task list — describe what the day should be about. Use [[wikilinks]] for project names, goals, and vault notes referenced.}
 
 ## Log
 

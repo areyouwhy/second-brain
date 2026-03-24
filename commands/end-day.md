@@ -90,7 +90,7 @@ tags:
   - daily
 date: $CURRENT_DATE
 projects:
-  - {project names that had activity today}
+  - "[[Project Name]]"
 decisions:
   - {key decisions made, pulled from session notes or commits}
 open-threads:
@@ -115,15 +115,23 @@ Write the `## Log` section as **2-4 paragraphs of journal-style prose**. This sh
 - Problems encountered and how they were resolved
 - The current state of things — what's done, what's in progress
 
+**Use wikilinks throughout the prose.** Every project name, session note, person, and vault note referenced should be a `[[wikilink]]`. This connects the daily note to the rest of the graph — project backlinks show which days touched them, and the graph view reveals patterns over time.
+
+- Project names → `[[Second Brain]]`, `[[ruy.se]]`
+- Session notes → `[[2026-03-24 — Setup polish, update mode, and terminal titles]]`
+- People → `[[Person Name]]` if someone came up
+- Vault notes → `[[Design System]]`, `[[Goals]]` if referenced
+
 **What NOT to do:**
 - Don't use bullet lists or sub-headers inside Log — write flowing paragraphs
 - Don't include commit hashes or raw git output
 - Don't write stats ("2 sessions across 3 projects") — describe what happened
 - Don't repeat the frontmatter data verbatim — the prose should add context and narrative
+- Don't use bold text for project names — use `[[wikilinks]]` instead
 
 **Example of good tone:**
 
-> Spent most of the day on the Second Brain setup script, rewriting it from a basic installer into a proper interactive CLI. The big decision was keeping it pure bash instead of reaching for Node — it's a one-time setup tool, not a web app. Got the profile interview working with a TUI grid picker, which feels much better than the old text prompts. Also touched ruy.se to add the design system preview page and link to the public repo. The vault itself needed restructuring to match the new project folder convention — moved session notes into per-project subfolders. Setup script is ready for testing but hasn't been committed yet.
+> Spent most of the day on [[Second Brain]], rewriting the setup script from a basic installer into a proper interactive CLI. The big decision was keeping it pure bash instead of reaching for Node — it's a one-time setup tool, not a web app. Got the profile interview working with a TUI grid picker, which feels much better than the old text prompts. Also touched [[ruy.se]] to add the [[Design System]] preview page and link to the public repo. The vault itself needed restructuring to match the new project folder convention — moved session notes into per-project subfolders. Setup script is ready for testing but hasn't been committed yet.
 
 If there are no projects with activity today:
 
