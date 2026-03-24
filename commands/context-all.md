@@ -50,13 +50,7 @@ obsidian vault="{{VAULT_NAME}}" list sort=modified limit=10
 
 Read any recently modified notes not already loaded.
 
-## Step 6: Set terminal title
-
-```bash
-osascript -e 'tell application "iTerm2" to tell current session of current window to set name to "All Context"' 2>/dev/null || printf '\033]0;All Context\007'
-```
-
-## Step 7: Output
+## Step 6: Output
 
 ---
 

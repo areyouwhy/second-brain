@@ -48,18 +48,7 @@ Plus check recently modified notes for current focus:
 obsidian vault="{{VAULT_NAME}}" list sort=modified limit=5
 ```
 
-## Step 4: Set terminal title
-
-After detecting the project (or lack thereof), set the terminal tab title:
-
-```bash
-osascript -e 'tell application "iTerm2" to tell current session of current window to set name to "Project Name"' 2>/dev/null || printf '\033]0;Project Name\007'
-```
-
-- If a project was detected: use the project name (e.g., `Second Brain`, `Churri.se`)
-- If no project was detected: use `Claude Code`
-
-## Step 5: Output a briefing
+## Step 4: Output a briefing
 
 ---
 
