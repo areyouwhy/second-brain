@@ -4,11 +4,13 @@
 
 Check the current working directory. Extract the project folder name.
 
-Search for a matching project note:
+Search for a matching project note in the `Projects/` folder:
 
 ```
-obsidian vault="{{VAULT_NAME}}" search query="directory: {folder-name}" limit=5
+obsidian vault="{{VAULT_NAME}}" search query="{folder-name}" path="Projects" limit=5
 ```
+
+From the results, read each candidate note and check its frontmatter for `directory: {folder-name}`. The first match is your project note.
 
 If no match is found, list all project notes and ask which one to load:
 ```
