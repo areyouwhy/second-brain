@@ -12,6 +12,17 @@ open-threads: []
 
 ## Intentions
 
+## Sessions
+
+```dataview
+TABLE WITHOUT ID
+  link(file.path, title) AS "Session",
+  parent AS "Project"
+FROM ""
+WHERE contains(tags, "session") AND date = this.date
+SORT file.ctime ASC
+```
+
 ## Log
 
 ## Reflections
