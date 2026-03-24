@@ -8,6 +8,12 @@ obsidian vault="{{VAULT_NAME}}" read path="Me/Preferences.md"
 obsidian vault="{{VAULT_NAME}}" read path="Me/Goals.md"
 ```
 
+## Set terminal title
+
+```bash
+printf '\033]0;Claude Code\033\\'
+```
+
 ## Output
 
 ---

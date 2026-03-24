@@ -26,6 +26,12 @@ obsidian vault="{{VAULT_NAME}}" search query="tag:#work" limit=10
 
 Read the top 3 most relevant results.
 
+## Set terminal title
+
+```bash
+printf '\033]0;Work\033\\'
+```
+
 ## Output
 
 ---

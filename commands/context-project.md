@@ -41,7 +41,15 @@ obsidian vault="{{VAULT_NAME}}" search query="- [ ]" limit=20
 ```
 Filter to tasks in the project note or referencing the project.
 
-## Step 5: Output
+## Step 5: Set terminal title
+
+Set the terminal tab title to the detected project name:
+
+```bash
+printf '\033]0;Project Name\033\\'
+```
+
+## Step 6: Output
 
 ---
 

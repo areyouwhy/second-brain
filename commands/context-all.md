@@ -50,7 +50,13 @@ obsidian vault="{{VAULT_NAME}}" list sort=modified limit=10
 
 Read any recently modified notes not already loaded.
 
-## Step 6: Output
+## Step 6: Set terminal title
+
+```bash
+printf '\033]0;All Context\033\\'
+```
+
+## Step 7: Output
 
 ---
 
