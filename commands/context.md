@@ -53,7 +53,7 @@ obsidian vault="{{VAULT_NAME}}" list sort=modified limit=5
 After detecting the project (or lack thereof), set the terminal tab title:
 
 ```bash
-printf '\033]0;Project Name\033\\'
+osascript -e 'tell application "iTerm2" to tell current session of current window to set name to "Project Name"' 2>/dev/null || printf '\033]0;Project Name\007'
 ```
 
 - If a project was detected: use the project name (e.g., `Second Brain`, `Churri.se`)

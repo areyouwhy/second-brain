@@ -29,7 +29,7 @@ Read the top 3 most relevant results.
 ## Set terminal title
 
 ```bash
-printf '\033]0;Work\033\\'
+osascript -e 'tell application "iTerm2" to tell current session of current window to set name to "Work"' 2>/dev/null || printf '\033]0;Work\007'
 ```
 
 ## Output

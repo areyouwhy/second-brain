@@ -11,7 +11,7 @@ obsidian vault="{{VAULT_NAME}}" read path="Me/Goals.md"
 ## Set terminal title
 
 ```bash
-printf '\033]0;Claude Code\033\\'
+osascript -e 'tell application "iTerm2" to tell current session of current window to set name to "Claude Code"' 2>/dev/null || printf '\033]0;Claude Code\007'
 ```
 
 ## Output

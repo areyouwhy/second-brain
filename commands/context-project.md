@@ -46,7 +46,7 @@ Filter to tasks in the project note or referencing the project.
 Set the terminal tab title to the detected project name:
 
 ```bash
-printf '\033]0;Project Name\033\\'
+osascript -e 'tell application "iTerm2" to tell current session of current window to set name to "Project Name"' 2>/dev/null || printf '\033]0;Project Name\007'
 ```
 
 ## Step 6: Output
