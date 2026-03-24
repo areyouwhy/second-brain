@@ -37,7 +37,7 @@ Read every result. For each project note, also read all notes listed in its `con
 ## Step 4: Load system notes
 
 ```
-obsidian vault="{{VAULT_NAME}}" read path="context-manifest.md"
+obsidian vault="{{VAULT_NAME}}" read path="AI Setup/Context Manifest.md"
 obsidian vault="{{VAULT_NAME}}" read path="Design/Design System.md"
 obsidian vault="{{VAULT_NAME}}" read path="AI Setup/AI Workflows.md"
 ```

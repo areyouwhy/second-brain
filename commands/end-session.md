@@ -63,20 +63,34 @@ Add a concise entry:
 - {date}: {1-line summary of what was accomplished}
 ```
 
-### Update or create `## Session Notes`
+### Create a session note file
 
-If `## Session Notes` doesn't exist, create it above `## Log`:
+Session notes live in their own files under `Projects/{Project Name}/`. Each project is a folder — the project note is the index file (`Projects/{Project Name}/{Project Name}.md`) and session notes sit alongside it.
 
-```markdown
-## Session Notes
+If the project note hasn't been moved into a folder yet (legacy structure), move it first:
+1. Create the folder `Projects/{Project Name}/`
+2. Move `Projects/{Project Name}.md` → `Projects/{Project Name}/{Project Name}.md`
 
-Notes from work sessions — context for next time.
+Create a new file:
+
+```
+Projects/{Project Name}/{date} — {session title}.md
 ```
 
-Add a new session entry at the top (most recent first):
+The session title should be a short phrase describing the session's focus (e.g., "Email routing setup", "MIDI debugging", "Camera roll scroll effect").
+
+Use this template:
 
 ```markdown
-### {date} — {session title}
+---
+title: {session title}
+date: {date}
+tags:
+  - session
+parent: "[[{Project Name}]]"
+---
+
+# {date} — {session title}
 
 **Changes:**
 - {grouped commit summaries — not raw hashes, describe what changed}
@@ -93,7 +107,20 @@ Add a new session entry at the top (most recent first):
 - {any uncommitted work or unpushed commits}
 ```
 
-The session title should be a short phrase describing the session's focus (e.g., "Email routing setup", "MIDI debugging", "Camera roll scroll effect").
+If the project note doesn't have a `## Session Notes` section yet, add one above `## Log`:
+
+```markdown
+## Session Notes
+
+Notes from work sessions — stored in their own folder.
+
+\```dataview
+TABLE date AS "Date", title AS "Summary"
+FROM "Projects/{Project Name}"
+WHERE contains(tags, "session")
+SORT date DESC
+\```
+```
 
 ## Step 5: Extract vault-worthy knowledge
 

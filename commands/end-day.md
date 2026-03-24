@@ -52,7 +52,13 @@ For each project with activity, find its vault note:
 obsidian vault="{{VAULT_NAME}}" search query="directory: {dir-name}" limit=3
 ```
 
-Read the project note. Check if `## Session Notes` has entries from today — if so, the session was already logged by `/end-session` and we can pull from there instead of re-analyzing commits.
+Read the project note. Then check for session note files from today in the project's subfolder:
+
+```
+obsidian vault="{{VAULT_NAME}}" search query="date: {date}" path="Projects/{Project Name}" limit=5
+```
+
+If session files exist from today, the session was already logged by `/end-session` — read those files and pull from them instead of re-analyzing commits.
 
 ## Step 3: Fill gaps
 
@@ -60,7 +66,7 @@ For projects that had commits today but no session notes from today (i.e., `/end
 
 - Update `last-updated` in frontmatter to today's date
 - Append a log entry to `## Log`: `- {date}: {1-line summary}`
-- If `## Session Notes` exists, add a brief entry. If not, skip — `/end-session` is the right tool for detailed session notes. Just capture the log line.
+- Create a lightweight session note file in `Projects/{Project Name}/` if none exists from today. Keep it brief — `/end-session` is the right tool for detailed session notes. Always capture the log line in the project note.
 
 This keeps `/end-day` fast and non-redundant. It doesn't redo work that `/end-session` already did. But it always updates `last-updated` for any project that had activity.
 

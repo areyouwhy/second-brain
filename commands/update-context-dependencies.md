@@ -17,7 +17,7 @@ obsidian vault="{{VAULT_NAME}}" list limit=100
 
 ## Step 3: Analyze each project
 
-For each project note (including its `## Session Notes` if any), analyze:
+For each project note, also read its most recent session notes from the project's subfolder (e.g., `Projects/{Project Name}/2026-*.md`). Analyze:
 
 ### Dependencies
 
@@ -35,7 +35,7 @@ For each project note (including its `## Session Notes` if any), analyze:
 5. **Entities without vault notes** — Does the project reference hardware, instruments, APIs, or external services that have meaningful specs but no dedicated vault note?
    - e.g., a project note mentions "Arturia KeyLab 49" with MIDI details scattered in session notes → should be `Computer/Hardware/Arturia KeyLab 49 Specs.md`
    - e.g., session notes mention an API with rate limits, auth quirks, endpoint mappings → could be a `Computer/Software/` note
-6. **Knowledge trapped in session notes** — Read through `## Session Notes` entries. Is there factual, reference-style knowledge (specs, configurations, API behaviors) that would be more useful as a standalone vault note than buried in a session entry?
+6. **Knowledge trapped in session notes** — Read through session note files in the project folder. Is there factual, reference-style knowledge (specs, configurations, API behaviors) that would be more useful as a standalone vault note than buried in a session entry?
    - The test: if a *different* project might need this knowledge, it belongs in its own note
    - If it's only useful for understanding what happened in *this* project, it's fine as a session note
 
@@ -66,7 +66,7 @@ After showing all proposals, ask: "Apply these changes? (all / pick individually
 
 **For dependency changes:** update the project note's frontmatter:
 ```
-obsidian vault="{{VAULT_NAME}}" update path="Projects/{project}.md" properties='{"context-dependencies": ["path/one.md", "path/two.md"]}'
+obsidian vault="{{VAULT_NAME}}" update path="Projects/{project}/{project}.md" properties='{"context-dependencies": ["path/one.md", "path/two.md"]}'
 ```
 If the obsidian CLI doesn't support property updates, use file editing to update the YAML frontmatter directly.
 
