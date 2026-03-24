@@ -9,7 +9,7 @@ A set of Claude Code commands and an Obsidian vault structure that together crea
 ## How it works
 
 - **Obsidian vault** stores your personal knowledge: identity, goals, projects, work, and more
-- **10 slash commands** for Claude Code load different tiers of context depending on the task
+- **11 slash commands** for Claude Code load different tiers of context depending on the task
 - **Projects own their dependencies** — each project note declares which vault notes it needs via frontmatter
 - **Session lifecycle commands** capture what you learned and decided, so knowledge compounds
 
@@ -42,7 +42,7 @@ cd second-brain
 The setup script will:
 1. Ask for your vault name and location
 2. Create the vault folder structure with starter notes
-3. Install all 10 Claude Code commands configured for your vault
+3. Install all 11 Claude Code commands configured for your vault
 
 Then open Obsidian, add the vault, and start filling in your notes.
 
@@ -55,7 +55,8 @@ Then open Obsidian, add the vault, and start filling in your notes.
 | `/context-work` | Identity + career + current role |
 | `/context-project` | Deep project context with all dependencies |
 | `/context-all` | Everything in the vault (heaviest) |
-| `/start-day` | Morning briefing — open threads, uncommitted work, priorities |
+| `/start-day` | Morning briefing — open threads, uncommitted work, priorities from Current Focus |
+| `/review` | Review and update Current Focus — compare actual work against priorities |
 | `/end-session` | Wrap up a project work session |
 | `/end-day` | End-of-day aggregation across all projects |
 | `/update-context-dependencies` | Maintain project dependency declarations |
@@ -69,6 +70,7 @@ Your Vault/
 │   ├── About Me.md
 │   ├── Preferences.md
 │   ├── Goals.md
+│   ├── Current Focus.md
 │   ├── Work & Career.md
 │   ├── Interests & Hobbies.md
 │   └── People.md

@@ -24,11 +24,12 @@ flowchart LR
     style W fill:#1e293b,color:#e2e8f0,stroke:#475569
 ```
 
-**`/start-day`** — morning orientation. Open threads, uncommitted work, goals, priorities from the vault.
+**`/start-day`** — morning orientation. Reads [[Current Focus]], open threads, uncommitted work.
 **`/context`** — start of each project session. Auto-detects project, loads dependencies.
 **Work** — just work. Claude has your context. Ask for extra vault notes as needed.
 **`/end-session`** — captures what happened. Logs commits, decisions, knowledge.
 **`/end-day`** — aggregates all projects, writes the daily note, flags uncommitted work.
+**`/review`** — whenever priorities feel stale. Compares actual work against [[Current Focus]], proposes updates.
 
 ## Commands Reference
 
@@ -36,11 +37,12 @@ flowchart LR
 
 | Command | What it does |
 |---------|-------------|
-| `/start-day` | Morning briefing — reads yesterday's open threads, scans for uncommitted work, surfaces priorities, writes Intentions in today's daily note |
+| `/start-day` | Morning briefing — reads [[Current Focus]], yesterday's open threads, scans for uncommitted work, writes Intentions in today's daily note |
+| `/review` | Reviews and updates [[Current Focus]] — compares actual work against priorities, proposes changes. No fixed cadence — run whenever focus feels stale |
 | `/end-session` | Wraps up a project work session — logs commits, decisions, insights, and ideas to the project's vault note as a session entry |
 | `/end-day` | End-of-day wrap-up — aggregates all project sessions, writes a narrative daily note with structured frontmatter, flags open threads |
 
-`/start-day` and `/end-day` are a pair — one opens the day, the other closes it. `/end-session` runs between them, once per project session.
+`/start-day` and `/end-day` are a pair — one opens the day, the other closes it. `/end-session` runs between them, once per project session. `/review` runs on its own cadence — whenever priorities need a refresh.
 
 ### Context loading
 
@@ -60,6 +62,14 @@ Lighter = faster + cheaper. Use the minimum that fits the task.
 |---------|-------------|
 | `/trace <topic>` | See how an idea evolved across the vault over time |
 | `/update-context-dependencies` | Audit and update project dependency declarations (run occasionally) |
+
+### Focus management
+
+| Command | When to use |
+|---------|-------------|
+| `/review` | Priorities feel stale, returning from a break, or when work has drifted from focus |
+
+`/review` reads [[Current Focus]] and compares it against actual activity (daily notes, session notes, git commits) since the last review. It proposes updates and asks before applying. There's no fixed schedule — run it when it feels right.
 
 ## How context loading works
 
@@ -94,4 +104,4 @@ Structured data (projects touched, decisions, open threads) lives in the daily n
 
 ## Building the habit
 
-The minimum daily loop is three commands: `/start-day` → `/context` → `/end-day`. Everything else is optional and compounds over time.
+The minimum daily loop is three commands: `/start-day` → `/context` → `/end-day`. Run `/review` whenever your [[Current Focus]] feels stale — there's no fixed cadence. Everything else is optional and compounds over time.

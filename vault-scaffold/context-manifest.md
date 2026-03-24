@@ -15,6 +15,7 @@ This vault uses a tiered context system with Claude Code. Commands load differen
 - Me/About Me.md
 - Me/Preferences.md
 - Me/Goals.md
+- Me/Current Focus.md
 
 ### Extended Identity (fallback when no project detected)
 - Me/Work & Career.md
@@ -50,5 +51,5 @@ The `directory` field matches against the folder name on disk. The `context-depe
 
 ## See also
 
-- [[Command Workflow]] — How to use all 10 commands throughout a typical day
+- [[Command Workflow]] — How to use all 11 commands throughout a typical day
 - [[AI Setup]] — Overview of AI tooling for this vault

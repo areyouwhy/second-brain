@@ -241,7 +241,8 @@ confirm_setup() {
   echo -e "  Vault name   ${BOLD}$VAULT_NAME${RESET}"
   echo -e "  Vault path   ${BOLD}${display_vault_path}${RESET}"
   echo -e "  Command tag  ${BOLD}[$USER_TAG]${RESET}"
-  echo -e "  Commands     ${DIM}10 commands → ~/.claude/commands/${RESET}"
+  echo -e "  Commands     ${DIM}11 commands → ~/.claude/commands/${RESET}"
+  echo -e "  Global       ${DIM}~/.claude/CLAUDE.md${RESET}"
   print_blank
 
   echo -ne "  Proceed? ${DIM}(Y/n)${RESET} "
@@ -1072,6 +1073,71 @@ launch_profile_setup() {
   fi
 }
 
+# ─── Global CLAUDE.md ─────────────────────────────────────────────────────────
+
+setup_global_claude_md() {
+  local claude_md="$HOME/.claude/CLAUDE.md"
+  local display_vault_path
+  display_vault_path=$(display_path "$VAULT_PATH")
+
+  print_blank
+  echo -e "  ${BOLD}Global CLAUDE.md${RESET}"
+  print_blank
+  echo -e "  ${DIM}This gives Claude a baseline in every session — your vault${RESET}"
+  echo -e "  ${DIM}location, how to load context, and coding preferences.${RESET}"
+  print_blank
+
+  if [[ -f "$claude_md" ]]; then
+    echo -e "  ${YELLOW}~/.claude/CLAUDE.md already exists${RESET}"
+    print_blank
+    echo -ne "  Overwrite with second-brain template? ${DIM}(y/N)${RESET} "
+    read -r -n 1 reply
+    echo ""; flush_stdin
+    if [[ ! "$reply" =~ ^[Yy]$ ]]; then
+      print_info "Kept existing CLAUDE.md"
+      return
+    fi
+    print_blank
+  fi
+
+  if [[ "$DRY_RUN" == "true" ]]; then
+    print_success "${MAGENTA}Would create ~/.claude/CLAUDE.md${RESET}"
+    return
+  fi
+
+  mkdir -p "$HOME/.claude"
+  cat > "$claude_md" << CLAUDEMD
+# Global Claude Code Context
+
+## My Second Brain
+
+I have an Obsidian vault called \`${VAULT_NAME}\` at \`${display_vault_path}\`.
+
+Use the \`obsidian\` CLI with \`vault="${VAULT_NAME}"\` for vault operations (read, write, search).
+
+### Loading context
+
+Run \`/context\` at the start of a session to load relevant vault context. It auto-detects the project from the working directory. Other context commands:
+
+- \`/context-me\` — lightweight identity only
+- \`/context-work\` — career and job context
+- \`/context-project\` — deep project context
+- \`/context-all\` — full vault load
+- \`/start-day\` — morning briefing
+- \`/end-session\` — wrap up a project session
+- \`/end-day\` — end-of-day wrap-up
+
+### Preferences
+
+- Be concise — lead with the answer, skip filler
+- Don't over-engineer — only change what's asked for
+- Use Obsidian wikilinks (\`[[Note Name]]\`) for internal vault references
+- Don't add docstrings, comments, or type annotations to code I didn't change
+CLAUDEMD
+
+  print_success "Created ${BOLD}~/.claude/CLAUDE.md${RESET}"
+}
+
 # ─── Next Steps ───────────────────────────────────────────────────────────────
 
 print_next_steps() {
@@ -1132,8 +1198,9 @@ print_help() {
   echo -e "  Interactive setup that:"
   echo -e "    1. Checks prerequisites (Obsidian, Claude Code, obsidian-skills)"
   echo -e "    2. Creates an Obsidian vault with starter notes"
-  echo -e "    3. Installs 10 Claude Code slash commands for your vault"
-  echo -e "    4. Optionally interviews you and launches Claude Code to"
+  echo -e "    3. Installs 11 Claude Code slash commands for your vault"
+  echo -e "    4. Creates a global ~/.claude/CLAUDE.md for always-on context"
+  echo -e "    5. Optionally interviews you and launches Claude Code to"
   echo -e "       fill in your vault notes automatically"
   echo ""
   echo -e "  ${DIM}Re-run after pulling updates — the script auto-detects an${RESET}"
@@ -1329,6 +1396,7 @@ main() {
   confirm_setup
   create_vault
   install_commands
+  setup_global_claude_md
   run_interview
   launch_profile_setup
   print_next_steps

@@ -16,11 +16,12 @@ flowchart LR
     style W fill:#1e293b,color:#e2e8f0,stroke:#475569
 ```
 
-**`/start-day`** — morning orientation. Open threads, uncommitted work, goals, priorities from the vault.
+**`/start-day`** — morning orientation. Reads [[Current Focus]], open threads, uncommitted work.
 **`/context`** — start of each project session. Auto-detects project, loads dependencies.
 **Work** — just work. Claude has your context. Ask for extra vault notes as needed.
 **`/end-session`** — captures what happened. Logs commits, decisions, knowledge.
 **`/end-day`** — aggregates all projects, writes the daily note, flags uncommitted work.
+**`/review`** — whenever priorities feel stale. Compares actual work against [[Current Focus]], proposes updates.
 
 ## Pick the Right Command
 
@@ -31,6 +32,7 @@ flowchart LR
     Q -->|Personal| cme["/context-me"]
     Q -->|Career| cw["/context-work"]
     Q -->|Big picture| ctxall["/context-all"]
+    Q -->|Priorities stale?| rev["/review"]
     Q -->|Idea history| trace["/trace"]
     style ctx fill:#1e293b,color:#f0b429,stroke:#f0b429
     style ctxp fill:#1e293b,color:#f0b429,stroke:#f0b429
@@ -56,9 +58,10 @@ Lighter = faster + cheaper. Use the minimum that fits.
 
 | Command | When |
 |---------|------|
+| `/review` | Review and update Current Focus — compare work against priorities |
 | `/trace <topic>` | See how an idea evolved across the vault |
 | `/update-context-dependencies` | Audit project dependencies (run occasionally) |
 
 ## Building the Habit
 
-The minimum daily loop is three commands: `/start-day` → `/context` → `/end-day`. Everything else is optional and compounds over time.
+The minimum daily loop is three commands: `/start-day` → `/context` → `/end-day`. Run `/review` whenever your Current Focus feels stale — there's no fixed cadence. Everything else is optional and compounds over time.

@@ -33,17 +33,14 @@ obsidian vault="{{VAULT_NAME}}" search query="tag:#daily" limit=5
 
 Read the most recent one found.
 
-## Step 3: Read goals and priorities
+## Step 3: Read current focus and goals
 
 ```
+obsidian vault="{{VAULT_NAME}}" read path="Me/Current Focus.md"
 obsidian vault="{{VAULT_NAME}}" read path="Me/Goals.md"
 ```
 
-Search for anything tagged as a weekly or active focus:
-
-```
-obsidian vault="{{VAULT_NAME}}" search query="tag:#weekly OR tag:#this-week OR tag:#priority" limit=10
-```
+[[Current Focus]] is the primary source for today's priorities — it has the active focus areas. [[Goals]] provides the broader context. Check the `last-reviewed` date in Current Focus — if it's more than 2 weeks old, mention that a `/review` might be due.
 
 ## Step 4: Scan for uncommitted work and recent project activity
 

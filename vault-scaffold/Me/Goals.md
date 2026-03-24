@@ -7,9 +7,9 @@ tags:
 
 # Goals
 
-## Current
+## Right Now
 
-<!-- What are you focused on right now? -->
+See [[Current Focus]] for active priorities — updated via `/review`.
 
 ## This Year
 
